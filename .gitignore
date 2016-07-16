@@ -6,3 +6,5 @@ JavaApplication1/nbproject/genfiles.properties
 JavaApplication1/nbproject/project.properties
 JavaApplication1/nbproject/project.xml
 JavaApplication1/nbproject/*.class
+/JavaApplication1/build/
+/JavaApplication1/dist/
