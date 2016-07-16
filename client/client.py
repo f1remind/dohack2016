@@ -5,6 +5,7 @@ class client():
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect((self.ip, self.port))
 		try:
+			print(s.recv(1024).decode())
 			while True:
 				n = input('Nachricht: ')
 				n += '\n\r'
