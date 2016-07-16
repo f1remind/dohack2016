@@ -41,7 +41,7 @@ public class Server {
 
                 pw.println("Hello, " + str);
                 pw.close();
-                socket.close();
+                socket.close(); 
 
                 System.out.println("Just said hello to:" + str);
             }
