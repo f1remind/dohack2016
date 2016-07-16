@@ -44,6 +44,8 @@ public class Server {
                 socket.close(); 
 
                 System.out.println("Just said hello to:" + str);
+               // CommunicationThread thread = new CommunicationThread(socket);
+               // thread.run();
             }
         }
         catch(IOException ioe){
