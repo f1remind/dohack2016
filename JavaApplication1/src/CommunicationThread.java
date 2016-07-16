@@ -22,3 +22,4 @@ public class CommunicationThread extends Thread {
         
     }
 }
+ 
