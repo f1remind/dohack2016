@@ -6,8 +6,9 @@ class client():
 		s.connect((self.ip, self.port))
 		try:
 			while True:
-				nachricht = input('Nachricht: ')
-				s.send(nachricht.encode())
+				n = input('Nachricht: ')
+				n += '\n\r'
+				s.send(n.encode())
 				antwort = s.recv(1024)
 				print('[{}] {}'.format(self.ip, antwort.decode()))
 		finally:
