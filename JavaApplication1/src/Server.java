@@ -34,6 +34,7 @@ public class Server {
                 CommunicationThread newThread = new CommunicationThread(socket);
                 threads.add(newThread);
                 newThread.run();
+                 System.out.println("Server wartet auf neue Verbindung");
                 
              }
         }

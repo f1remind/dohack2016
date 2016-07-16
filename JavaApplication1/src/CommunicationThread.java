@@ -35,12 +35,18 @@ public class CommunicationThread extends Thread {
             pw = new PrintWriter(os, true);
             pw.println("What's you name?");
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            while(!br.ready()){}
             String str = br.readLine();
             pw.println("Hello, " + str);
             userName = str;
             while (socket.isConnected()) { 
-                str = br.readLine();
-                System.out.println(str);
+                if(br.ready()){
+                    str = br.readLine();
+                    System.out.println(str);
+                    pw.println("echo: " + str);
+                }
+                
+                
 
 
 
