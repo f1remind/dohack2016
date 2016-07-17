@@ -21,11 +21,11 @@ public class GameController {
         gamesList = new ArrayList<ArrayList<CommunicationThread>>(games+1);
         System.out.println("Länge der gameList "+gamesList.size());
         for(int i =0; i< games+1;i++){
-            gamesList.add(i,new ArrayList<>(2));
+            gamesList.add(i,new ArrayList<CommunicationThread>(2));
             
             System.out.println("Länge der gameList "+gamesList.get(i).size());
         }
-        runngingGames = new ArrayList<>();
+        runngingGames = new ArrayList<Game>();
     }
     
     public void joinGame(int id, CommunicationThread ct){
