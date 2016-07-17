@@ -49,9 +49,7 @@ public class Game {
         
     }
     
-    private String askForTurn(CommunicationThread p){
-        String pName = p.getUserName();
-        p.sendMessage(pName);        
+    private String askForTurn(CommunicationThread p){        
         String response = p.getResponse();        
         return response;
     }
