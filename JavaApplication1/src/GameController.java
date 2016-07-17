@@ -29,6 +29,13 @@ public class GameController {
     }
     
     public void joinGame(int id, CommunicationThread ct){
+        for(int i = 0; i<gamesList.get(id).size();i++){
+            if(!gamesList.get(id).get(i).checkTillConnected()){
+                gamesList.get(id).get(i).terminateThread();
+                gamesList.get(id).remove(i);
+                i--;
+            }
+        }
         if(gamesList.get(id).isEmpty()){
             gamesList.get(id).add(ct);
             ct.sendMessage("WAIT");
