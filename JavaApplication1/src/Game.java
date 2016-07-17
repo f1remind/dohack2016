@@ -96,6 +96,7 @@ public class Game {
             }
         }
         if(isGameOver(board, playerID)){
+            gameOver = true;
             p1.sendMessage("WIN;"+p1.getName());
         }
         
