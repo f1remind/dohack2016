@@ -24,7 +24,7 @@ public class Server {
         // TODO code application logic here
         int games = 0;
         int port = 4586;
-        
+//        System.out.println("Vor irgendwelchen Abfragen");
         if(args.length==1){
             int temp = Integer.parseInt(args[0]);
             if(temp>1000){
@@ -50,7 +50,8 @@ public class Server {
         try{
             ServerSocket ss = new ServerSocket(port);
             System.out.println("Server wurde aufgesetzt");
-             while (true) {
+             while(true){
+//                System.out.println("Warte auf Verbindung");
                 Socket socket = ss.accept();
                 CommunicationThread newThread = new CommunicationThread(socket, v);
                 threads.add(newThread);
@@ -61,6 +62,9 @@ public class Server {
         catch(IOException ioe){
             System.out.println("Can't setup Server Socket");
             ioe.printStackTrace();
+        }catch(Exception e){
+            System.out.println("Eine Exception kam geflogen");
+            e.printStackTrace();
         }
         finally{
             System.out.println("Server wure herunter gefahren");
