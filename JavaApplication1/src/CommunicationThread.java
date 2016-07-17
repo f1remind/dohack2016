@@ -120,6 +120,7 @@ System.out.println("Gameauswahl: "+str);
     
     public void sendMessage(String message){
         pw.println(message);
+        pw.flush();
     }
     
     public String getResponse(){
