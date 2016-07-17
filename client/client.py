@@ -1,4 +1,5 @@
 import socket
+from tictactoe import logic as game0
 import gui
 
 class client():
@@ -24,18 +25,46 @@ class client():
 			s = None
 		return s
 	def select_game(self, s):
-		try:
-			games = s.recv(1024).decode().split(';')
-			games_available = []
-			for game in self.games:
-				if game[0] in games:
-					games_available.append(game)
-			self.gui.setGame(games_available)
-			self.gui.display()
-		except ConnectionRefusedError:
-			s.close()
+		games = list(s.recv(1024).decode().split(';'))
+		#clean the game entries
+		for i in range(len(games)):
+			games[i] = int(games[i])
+		#recieve string of csv
+		games_available = []
+		games_available.append('Please select one of the following games:')
+		for game in self.games:
+			if game in games:
+				games_available.append(str(game) + ' : ' + str(self.games[game]['title']))
+		self.gui.setGame(games_available)
+		self.gui.display()
+		selection = None
+		while selection == None or (not selection in games) or (not selection in self.games):
+			if selection:
+				prompt = 'Please select a valid game: '
+			else:
+				prompt = 'Please select a game: '
+			selection = input(prompt)
+			try:
+				selection = int(selection)
+			except ValueError:
+				selection = -1
+		return selection
 		#schicke die id des gewaehlten spieles
-	def join_game(self, s):
+	def join_game(self, s, selection):
+		s.send((str(selection)+'\n').encode())
+		code = s.recv(1024).decode().strip()
+		print('[DEBUG] code:',code)
+		if code == 'WAIT':
+			self.gui.setGame(['Waiting for competition'])
+			self.gui.display()
+			code = s.recv(1024).decode().strip()
+			if code == 'READY':
+				game = self.games[selection]['handle'].logic(s, self.gui)
+				game.handle()
+		if code == 'READY':
+			game = self.games[selection]['handle'].logic(s, self.gui)
+			import pdb;pdb.set_trace()
+			game.handle()	
 		#Erwarte WAIT, READY, ERROR
 		#Bei READY: YOURTURN/NOTYOURTURN
 		#Bei erfolgreichem zug: Zughistory,
@@ -43,7 +72,8 @@ class client():
 		pass 
 	def run(self):
 		s = self.connect()
-		self.select_game(s)
+		selection = self.select_game(s)
+		self.join_game(s, selection)
 		
 		#Send game ID
 		while True:
@@ -54,7 +84,7 @@ class client():
 			s.send(n.encode())
 		s.close()
 	def __init__(self, port=4586, ip = 'localhost',username=''):
-		self.games = {0:['TicTacToe']}
+		self.games = {0:{'title':'TicTacToe','handle':game0}}
 		self.port = port
 		self.ip = ip
 		self.gui = gui.Gui()

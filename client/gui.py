@@ -24,7 +24,7 @@ class Gui():
 	def setPlayers(self, players):
 		self.players = players
 	def render(self):
-		screen = ['']*24
+		screen = ['']*22
 		#Turn players into a string of max length of 8 and
 		#20 entries
 		players = ['|']*22 
@@ -51,7 +51,7 @@ class Gui():
 		else:
 			vpadding = 0
 		for i in range(22):
-			if i <= padding or (i + padding) > 22:
+			if i < padding or (i + padding) > 22:
 				game[i] = ' '*60
 			elif self.game and (i-padding) < len(self.game):
 				if len(self.game[i-padding]) > 60:
@@ -81,8 +81,8 @@ class Gui():
 		for i in range(22):
 			screen[i] = players[i]+game[i]+history[i]
 		return screen					
-	def render(self):
-		screen = self.display()
+	def display(self):
+		screen = self.render()
 		for line in screen:
 			print(line)
 
