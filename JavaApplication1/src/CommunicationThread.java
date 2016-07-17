@@ -33,7 +33,7 @@ public class CommunicationThread extends Thread {
         try{
             //Aufbau der Streams und Writer
             os = socket.getOutputStream();
-            pw = new PrintWriter(os, true);
+            pw = new PrintWriter(os, false);
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
         catch(IOException ioe){
@@ -51,6 +51,7 @@ public class CommunicationThread extends Thread {
     public void run(){
         try{
             pw.println(version);
+            pw.flush();
             while(!br.ready()){}
             String str = br.readLine();        
             userName = str;
@@ -68,6 +69,7 @@ System.out.println("UserName: "+userName);
                     }
                 }
                 pw.println(listOfGameIds); 
+                pw.flush();
                 while(!br.ready()){}
                 str = "";
                 if(br.ready()){
