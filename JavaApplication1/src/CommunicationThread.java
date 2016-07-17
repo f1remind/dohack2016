@@ -18,38 +18,75 @@ import java.net.Socket;
  */
 public class CommunicationThread extends Thread {
     private final Socket socket;
-    public CommunicationThread(Socket socket){
+    private final long version;
+    private OutputStream os;
+    private PrintWriter pw = null;
+    private BufferedReader br;
+    boolean gameNotOver;
+    private GameController gc;
+    String userName = "";
+    
+    public CommunicationThread(Socket socket, long version){
         super();
         this.socket = socket;
+        this.version = version;
+        try{
+            //Aufbau der Streams und Writer
+            os = socket.getOutputStream();
+            pw = new PrintWriter(os, true);
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        }
+        catch(IOException ioe){
+            System.out.println("Fehler beim erstellen der Printer/Writer");
+            try{
+                socket.close();
+            }
+            catch(IOException ioe2){
+               
+            }
+        }
+        gc = Server.getGc();
     }
     @Override
     public void run(){
-        OutputStream os;
-        PrintWriter pw = null;
-        BufferedReader br;
-        
-        String userName = "";
-        System.out.println("Thread wurde gestartet");
         try{
-            os = socket.getOutputStream();
-            pw = new PrintWriter(os, true);
-            pw.println("What's you name?");
-            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            pw.println(version);
             while(!br.ready()){}
-            String str = br.readLine();
-            pw.println("Hello, " + str);
+            String str = br.readLine();        
             userName = str;
-            while (socket.isConnected()) { 
-                if(br.ready()){
-                    str = br.readLine();
-                    System.out.println(str);
-                    pw.println("echo: " + str);
+System.out.println("UserName: "+userName);            
+            while (socket.isConnected()) {
+                //Erstellen der Liste mit den ID's für die Spiele
+                int numOfGames = gc.getNumOfGames();
+                String listOfGameIds = "";
+                for(int i = 0; i<=numOfGames;i++){
+                    if(i == numOfGames){
+                        listOfGameIds += i;
+                    }
+                    else{
+                        listOfGameIds += i+";";
+                    }
                 }
-                
-                
+                pw.println(listOfGameIds); 
+                while(!br.ready()){}
+                str = "";
+                if(br.ready()){
+                    while(str.equals("")){
+                        str = br.readLine();
+                    }
+System.out.println("Gameauswahl: "+str);
+                    int selectedGame = Integer.parseInt(str);
+                    joinGame(selectedGame);
+                    gameNotOver = true;
+                    while(gameNotOver){
+                        try{
+                            this.sleep(1000);
+                        }
+                        catch(InterruptedException ie){
 
-
-
+                        }
+                    }
+                }
     //                System.out.println("Just said hello to:" + str);
             }
         }
@@ -68,5 +105,31 @@ public class CommunicationThread extends Thread {
         System.out.println("Es besteht keiner Verbindung mehr");
         
          
+    }
+    
+    private void joinGame(int game){
+        gc.joinGame(game, this);
+    }
+    public void setGameNotOver(boolean isGameNotOver){
+        gameNotOver = isGameNotOver;
+    }
+    
+    public String getUserName(){
+        return userName;
+    }
+    
+    public void sendMessage(String message){
+        pw.println(message);
+    }
+    
+    public String getResponse(){
+        String response = "";
+        try{
+            while(!br.ready()){}
+            response = br.readLine();
+        }
+        catch(IOException ioe){
+        }
+        return response;
     }
 }
