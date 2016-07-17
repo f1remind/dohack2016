@@ -12,3 +12,6 @@ JavaApplication1/build/classes/CommunicationThread.class
 JavaApplication1/build/classes/Server.class
 JavaApplication1/dist/JavaApplication1.jar
 JavaApplication1/dist/README.TXT
+/chellange/nbproject/private/
+/chellange/build/
+*.class
