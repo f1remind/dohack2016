@@ -5,19 +5,25 @@
 #The actual game using 
 
 
-class gui():
-	def __init__(self):
-		self.players = []
-		#DEBUG
-		self.players = ['Ben','Mike','Thomas','Jefferson','Longnameislongiton']
-		self.history = []
-		self.prompt = []
-		self.game = []
+class Gui():
+	def debug(self):
+		self.players =  ['Ben','Mike','Thomas','Jefferson','Longnameislongiton']
 		#DEBUG
 		from tictactoe import graphic
 		g = graphic.grid()
 		self.game = g.grid
-	def display(self):
+	def __init__(self,players=[],history=[],prompt=[],game=[]):
+		self.players = players
+		self.history = history
+		self.prompt = prompt
+		self.game = game
+	def setGame(self, game):
+		self.game = game
+	def setHistory(self, history):
+		self.history = history
+	def setPlayers(self, players):
+		self.players = players
+	def render(self):
 		screen = ['']*24
 		#Turn players into a string of max length of 8 and
 		#20 entries
@@ -75,10 +81,12 @@ class gui():
 		for i in range(22):
 			screen[i] = players[i]+game[i]+history[i]
 		return screen					
+	def render(self):
+		screen = self.display()
+		for line in screen:
+			print(line)
 
 if __name__ == '__main__':
-	g = gui()
-	screen = g.display()
-	for line in screen:
-		print(line)
-	
+	g = Gui()
+	g.debug()
+	g.display()
