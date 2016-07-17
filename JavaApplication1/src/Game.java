@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Game {
     private ArrayList<CommunicationThread> participants;
     private int id;
+    private boolean gameOver;
     
     public Game(int i, ArrayList<CommunicationThread> participants){
         id = i;
@@ -23,13 +24,15 @@ public class Game {
     public void startGame(int gameId){
         if(gameId==0){
             int[][] board = new int[3][3];
-            boolean gameOver = false;
+            gameOver = false;
             CommunicationThread p1 = participants.get(0);
             CommunicationThread p2 = participants.get(1);
             gameInit(p1,p2);
-            while(gameOver){
+            while(!gameOver){
                 doTurn(p1, p2, board, 1);
-                doTurn(p2, p1, board, 2);
+                if(!gameOver){
+                    doTurn(p2, p1, board, 2);
+                }
             }
             
         }
@@ -40,8 +43,8 @@ public class Game {
         String p2Name = p2.getUserName();
         p1.sendMessage("READY");
         p2.sendMessage("READY");
-        p1.sendMessage(p2Name);
-        p2.sendMessage(p1Name);
+        p1.sendMessage(p2Name+";"+p1Name);
+        p2.sendMessage(p1Name+";"+p2Name);
         
         
     }

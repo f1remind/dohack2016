@@ -55,7 +55,7 @@ public class CommunicationThread extends Thread {
             String str = br.readLine();        
             userName = str;
 System.out.println("UserName: "+userName);            
-            while (socket.isConnected()) {
+            while (socket.isConnected() && !socket.isClosed()) {
                 //Erstellen der Liste mit den ID's für die Spiele
                 int numOfGames = gc.getNumOfGames();
                 String listOfGameIds = "";
@@ -131,5 +131,18 @@ System.out.println("Gameauswahl: "+str);
         catch(IOException ioe){
         }
         return response;
+    }
+    
+    public boolean checkTillConnected(){
+        boolean isConnected;
+        isConnected = socket.isConnected();
+        if(isConnected){
+            isConnected = !socket.isClosed();
+        }
+        return isConnected;
+    }
+    
+    public void terminateThread(){
+        gameNotOver = false;
     }
 }
