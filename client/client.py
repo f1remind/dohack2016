@@ -63,7 +63,6 @@ class client():
 				game.handle()
 		if code == 'READY':
 			game = self.games[selection]['handle'].logic(s, self.gui)
-			import pdb;pdb.set_trace()
 			game.handle()	
 		#Erwarte WAIT, READY, ERROR
 		#Bei READY: YOURTURN/NOTYOURTURN
