@@ -95,9 +95,16 @@ public class Game {
                 p2.sendMessage(response);
             }
         }
-        if(isGameOver(board, playerID)){
+        if(isDraw(board)){
+            gameOver = true;
+            p1.sendMessage("DRAW;");
+            p2.sendMessage("DRAW;");
+        }
+        
+        else if(isGameOver(board, playerID)){
             gameOver = true;
             p1.sendMessage("WIN;"+p1.getName());
+            p2.sendMessage("WIN;"+p1.getName());
         }
         
     }
@@ -117,7 +124,7 @@ public class Game {
         }
         //Schau ob Vertikal ein SIegt erzeilt wurde
         for(int i = 0; i<board.length;i++){
-            for(int j = 0; j<board.length;j++){
+            for(int j = 0; j<board.length && i<board.length;j++){
                 if(board[j][i] != pnum){
                     i++;
                 }
@@ -133,5 +140,18 @@ public class Game {
             isOver = true;
         }
         return isOver;
+    }
+    
+    public boolean isDraw(int[][] board){
+        boolean isDraw = true;
+        for(int i=0;i<board.length;i++){
+            for(int j = 0; j<board.length;j++){
+                if(board[i][j]==0){
+                    isDraw = false;
+                    break;
+                }
+            }
+        }
+        return isDraw;
     }
 }
