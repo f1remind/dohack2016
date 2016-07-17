@@ -24,13 +24,24 @@ class logic():
 		#expect usernames
 		
 		usernames = list(self.socket.recv(1024).decode().strip().split(';'))
-		self.gui.setPlayers(usernames)
+		if len(usernames) > 1:
+			if self.gui.players:
+				if self.gui.history:
+					self.gui.history = self.gui.history.append([usernames[0], usernames[1]])
+				else:
+					print('[DEBUG] usernames',usernames)
+					self.gui.histoy = [usernames[0], usernames[1]]
+				self.graphic.insert('o',int(usernames[0]),int(usernames[1]))
+			else:
+				self.gui.setPlayers(usernames)
+			turn = self.socket.recv(1024).decode().strip()
+		else:
+			turn = usernames
 		self.gui.setGame(self.grid)
-		turn = self.socket.recv(1024).decode().strip()
+		self.gui.display()			
 		if turn == 'YOURTURN':
 			value = self.verify_input('-1 -1')
 			while not value: 
-				self.gui.display()			
 				print('enter the row and the column: (e.g. "1 1")')	
 				inputstring = input('>>> ')
 				value = self.verify_input(inputstring)
@@ -39,7 +50,7 @@ class logic():
 			if code == 'YOURTURN':
 				pass#You fucked up
 			else:
-				self.graphic.insert('x',inputstring.split()[0],inputstring.split()[1])
+				self.graphic.insert('x',int(inputstring.split()[0]),int(inputstring.split()[1]))
 				self.gui.display()
 				self.handle()
 				
