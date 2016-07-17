@@ -26,17 +26,12 @@ class logic():
 		usernames = list(self.socket.recv(1024).decode().strip().split(';'))
 		if len(usernames) > 1:
 			if self.gui.players:
-				if self.gui.history:
-					self.gui.history = self.gui.history.append([usernames[0], usernames[1]])
-				else:
-					print('[DEBUG] usernames',usernames)
-					self.gui.histoy = [usernames[0], usernames[1]]
 				self.graphic.insert('o',int(usernames[0]),int(usernames[1]))
 			else:
 				self.gui.setPlayers(usernames)
 			turn = self.socket.recv(1024).decode().strip()
 		else:
-			turn = usernames
+			turn = usernames[0]
 		self.gui.setGame(self.grid)
 		self.gui.display()			
 		if turn == 'YOURTURN':
